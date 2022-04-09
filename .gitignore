@@ -1,0 +1,11 @@
+*.o
+
+proj2
+
+srv_0
+compute_fp_1
+compute_int_0
+
+srv_0.gz
+compute_fp_1.gz
+compute_int_0.gz
