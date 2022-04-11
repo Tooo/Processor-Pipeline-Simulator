@@ -2,8 +2,8 @@
 #include <vector>
 using namespace std;
 
-#ifndef INSTRUCTION_H
-#define INSTRUCTION_H
+#ifndef INSTRUCTION_H_
+#define INSTRUCTION_H_
 /*
     Instruction Type
   - Enum class for Instruction Type
