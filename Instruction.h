@@ -18,6 +18,7 @@ enum class InstructionType {
 class Instruction {
     public:
         Instruction();
+        Instruction(std::string program_counter, InstructionType type, std::vector<std::string> dependencies);
 
         std::string program_counter;
         InstructionType type;
