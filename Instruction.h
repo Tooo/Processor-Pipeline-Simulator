@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+using namespace std;
 
 #ifndef INSTRUCTION_H
 #define INSTRUCTION_H
@@ -18,11 +19,11 @@ enum class InstructionType {
 class Instruction {
     public:
         Instruction();
-        Instruction(std::string program_counter, InstructionType type, std::vector<std::string> dependencies);
+        Instruction(string program_counter, InstructionType type, vector<string> dependencies);
 
-        std::string program_counter;
+        string program_counter;
         InstructionType type;
-        std::vector<std::string> dependencies;
+        vector<string> dependencies;
 
 };
 #endif
