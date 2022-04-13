@@ -1,7 +1,4 @@
 #include "TraceInput.h"
-#include <iostream>
-#include <fstream>
-#include <string>
 
 
 TraceInput::TraceInput(string trace_file_name, int start_inst, int inst_count) {
@@ -18,7 +15,7 @@ int TraceInput::getCurrLine(){
 
 void TraceInput::prepFile(){
 
-    std::ifstream traceFile (trace_file_name);
+    traceFile.open(trace_file_name);
 
     if(traceFile.is_open()){
 
@@ -28,3 +25,25 @@ void TraceInput::prepFile(){
         }
     }
 }
+
+Instruction TraceInput::nextInstruction(){
+
+    string c;
+
+    if(traceFile.is_open()){
+        c = traceFile.get();
+
+        //split string
+        stringstream ss(c);
+
+        string info;
+        while(ss >> c){
+            
+        }
+    }
+    else{
+        std::cout << "File not open!\n"; 
+    }
+}
+
+
