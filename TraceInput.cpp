@@ -28,21 +28,29 @@ void TraceInput::prepFile(){
 
 Instruction TraceInput::nextInstruction(){
 
-    string c;
+    string line;
 
     if(traceFile.is_open()){
-        c = traceFile.get();
+        line = traceFile.get();
 
         //split string
-        stringstream ss(c);
+        string info = "";
+         for (auto rem : line) 
+        { 
+            if (rem==',') 
+            {
 
-        string info;
-        while(ss >> c){
-            
-        }
+                
+                info=""; 
+            } 
+            else
+            { 
+                info=info+rem; 
+            } 
+        }  
     }
     else{
-        std::cout << "File not open!\n"; 
+       cout << "File not open!\n"; 
     }
 }
 

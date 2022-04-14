@@ -15,7 +15,7 @@ class TraceInput {
         int inst_count;
 
         int curr_line;
-        std::ifstream traceFile;
+        ifstream traceFile;
 
     public:
         TraceInput(string trace_file_name, int start_inst, int inst_count);
