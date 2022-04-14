@@ -28,30 +28,31 @@ class InstructionManager {
         Instruction dequeueFetch();
         void insertFetch(Instruction instruction);
         Instruction removeFetch();
+        InstructionType nextTypeFetch() {return fetch_queue.front().type;}
         bool isFetchQueueEmpty() {return fetch_queue.empty();}
         bool isFetchEmpty() {return fetch_vector.empty();}
 
         void enqueueDecode(Instruction instruction);
-        InstructionType nextTypeDecode();
         Instruction dequeueDecode();
         void insertDecode(Instruction instruction);
         Instruction removeDecode();
+        InstructionType nextTypeDecode() {return decode_queue.front().type;}
         bool isDecodeQueueEmpty() {return decode_queue.empty();}
         bool isDecodeEmpty() {return decode_vector.empty();}
 
         void enqueueExecute(Instruction instruction);
-        InstructionType nextTypeExecute();
         Instruction dequeueExecute();
         void insertExecute(Instruction instruction);
         Instruction removeExecute();
+        InstructionType nextTypeExecute() {return execute_queue.front().type;}
         bool isExecuteQueueEmpty() {return execute_queue.empty();}
         bool isExecuteEmpty() {return execute_vector.empty();}
 
         void enqueueMemory(Instruction instruction);
-        InstructionType nextTypeMemory();
         Instruction dequeueMemory();
         void insertMemory(Instruction instruction);
         Instruction removeMemory();
+        InstructionType nextTypeMemory() {return memory_queue.front().type;}
         bool isMemoryQueueEmpty() {return memory_queue.empty();}
         bool isMemoryEmpty() {return memory_vector.empty();}
 
@@ -60,8 +61,9 @@ class InstructionManager {
         Instruction dequeueRetire();
         void insertRetire(Instruction instruction);
         Instruction removeRetire();
-        bool isRetireQueueEmpty() {return memory_queue.empty();}
-        bool isRetireEmpty() {return memory_vector.empty();}
+        InstructionType nextTypeRetire() {return retire_queue.front().type;}
+        bool isRetireQueueEmpty() {return retire_queue.empty();}
+        bool isRetireEmpty() {return retire_vector.empty();}
 
 };
 #endif
