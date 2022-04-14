@@ -10,7 +10,7 @@ PipelineSimulation::~PipelineSimulation() {
 }
 
 void PipelineSimulation::start() {
-    for (int i = 0; i < 100; i++) {
+    while (trace_input->needNewInstruction()) {
         Instruction* instruction = trace_input->getNextInstruction();
         cout << instruction->toString();
     }

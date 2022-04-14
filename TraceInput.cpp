@@ -9,11 +9,7 @@ TraceInput::TraceInput(string trace_file_name, int start_inst, int inst_count) {
     prepFile();
 }
 
-int TraceInput::getCurrLine(){
-    return curr_line;
-}
-
-void TraceInput::prepFile(){
+void TraceInput::prepFile() {
 
     trace_file.open(trace_file_name);
 
@@ -26,7 +22,11 @@ void TraceInput::prepFile(){
     }
 }
 
-Instruction* TraceInput::getNextInstruction(){
+bool TraceInput::needNewInstruction() {
+    return curr_line < start_inst + inst_count;
+}
+
+Instruction* TraceInput::getNextInstruction() {
     if (!trace_file.is_open()) {
         cout << "File failed to open!\n";
         return NULL;
@@ -34,6 +34,7 @@ Instruction* TraceInput::getNextInstruction(){
 
     string line;
     getline(trace_file, line);
+
     vector<string> input;
     stringstream line_stream(line);
 
@@ -44,6 +45,7 @@ Instruction* TraceInput::getNextInstruction(){
     }
 
     int size = input.size();
+    curr_line++;
 
     if (size < 2) {
         cout << "Invalid line\n";

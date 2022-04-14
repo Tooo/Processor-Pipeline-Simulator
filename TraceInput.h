@@ -19,9 +19,9 @@ class TraceInput {
 
     public:
         TraceInput(string trace_file_name, int start_inst, int inst_count);
-        
-        int getCurrLine();
+
         void prepFile();
+        bool needNewInstruction();
         Instruction* getNextInstruction();
 
 };
