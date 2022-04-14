@@ -35,13 +35,24 @@ Instruction TraceInput::nextInstruction(){
 
         //split string
         string info = "";
+        int count = 0;
          for (auto rem : line) 
         { 
             if (rem==',') 
             {
-
+                
+                if(count == 0){
+                    //initial address
+                }
+                else if(count == 1){
+                    //instruction type
+                }
+                else{
+                    //dependency
+                }
                 
                 info=""; 
+                count++;
             } 
             else
             { 
