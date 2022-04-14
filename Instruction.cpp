@@ -1,7 +1,17 @@
 #include "Instruction.h"
 
-Instruction::Instruction(std::string program_counter, InstructionType type, std::vector<std::string> dependencies) {
+Instruction::Instruction(string program_counter, InstructionType type, vector<string> dependencies) {
     this->program_counter = program_counter;
     this->type = type;
     this->dependencies = dependencies;
 }
+
+
+Instruction::Instruction(){
+    dependencies = vector <string> (5);
+}
+
+void Instruction::addDependency(string dependency){
+    dependencies.push_back(dependency);
+}
+

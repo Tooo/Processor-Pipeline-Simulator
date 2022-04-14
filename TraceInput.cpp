@@ -32,7 +32,7 @@ Instruction TraceInput::nextInstruction(){
 
     if(traceFile.is_open()){
         line = traceFile.get();
-
+        Instruction* op = new Instruction();
         //split string
         string info = "";
         int count = 0;
@@ -43,12 +43,36 @@ Instruction TraceInput::nextInstruction(){
                 
                 if(count == 0){
                     //initial address
+                    op->program_counter = info;
                 }
                 else if(count == 1){
-                    //instruction type
+                    //instruction type => convert it to int then enum
+                    int type = stoi(info);
+                    switch (type)
+                    {
+                        case 1:
+                            op->type = InstructionType::INTEGER;
+                            
+                        case 2:
+                            op->type = InstructionType::FLOATING_POINT;
+                        
+                        case 3:
+                            op->type = InstructionType::BRANCH;
+                        
+                        case 4:
+                            op->type = InstructionType::LOAD;
+
+                        case 5:
+                            op->type = InstructionType::STORE;
+
+                        default:
+                            break;
+                    }
+                    //is there a more succint way to do this?
                 }
                 else{
-                    //dependency
+                    //dependencies
+                    op->addDependency(info);
                 }
                 
                 info=""; 
