@@ -6,7 +6,8 @@ PipelineSimulation::PipelineSimulation(TraceInput* trace_input, int width) {
 }
 
 PipelineSimulation::~PipelineSimulation() {
-
+    delete instruction_manager;
+    delete stats_manager;
 }
 
 void PipelineSimulation::start() {
@@ -15,4 +16,5 @@ void PipelineSimulation::start() {
         cout << instruction->toString();
     }
 
+    trace_input->closeFile();
 }
