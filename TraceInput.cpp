@@ -10,13 +10,13 @@ TraceInput::TraceInput(string trace_file_name, int start_inst, int inst_count) {
 }
 
 void TraceInput::prepFile() {
-
+    string temp;
     trace_file.open(trace_file_name);
 
     if (trace_file.is_open()) {
 
         while (curr_line < start_inst) {
-            trace_file.get();
+            getline(trace_file, temp);
             curr_line++;
         }
     }
