@@ -48,26 +48,7 @@ Instruction TraceInput::nextInstruction(){
                 else if(count == 1){
                     //instruction type => convert it to int then enum
                     int type = stoi(info);
-                    switch (type)
-                    {
-                        case 1:
-                            op->type = InstructionType::INTEGER;
-                            
-                        case 2:
-                            op->type = InstructionType::FLOATING_POINT;
-                        
-                        case 3:
-                            op->type = InstructionType::BRANCH;
-                        
-                        case 4:
-                            op->type = InstructionType::LOAD;
-
-                        case 5:
-                            op->type = InstructionType::STORE;
-
-                        default:
-                            break;
-                    }
+                    op->type = static_cast<InstructionType>(type);
                     //is there a more succint way to do this?
                 }
                 else{
