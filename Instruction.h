@@ -21,10 +21,13 @@ class Instruction {
     public:
         Instruction();
         Instruction(string program_counter, InstructionType type, vector<string> dependencies);
-        void addDependency(string dependency);
+        
         string program_counter;
         InstructionType type;
         vector<string> dependencies;
+
+        void addDependency(string dependency);
+        string toString();
 
 };
 #endif
