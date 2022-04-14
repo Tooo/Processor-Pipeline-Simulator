@@ -10,7 +10,6 @@ class InstructionManager {
     public:
         InstructionManager();
 
-        deque<Instruction> fetch_queue;
         vector<Instruction> fetch_vector;
         bool branch_halt;
 
