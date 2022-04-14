@@ -17,61 +17,50 @@ void TraceInput::prepFile(){
 
     trace_file.open(trace_file_name);
 
-    if(trace_file.is_open()){
+    if (trace_file.is_open()) {
 
-        while(curr_line < start_inst){
+        while (curr_line < start_inst) {
             trace_file.get();
             curr_line++;
         }
     }
 }
 
-Instruction TraceInput::getNextInstruction(){
-    string line;
-    Instruction* op = new Instruction();
+Instruction* TraceInput::getNextInstruction(){
+    if (!trace_file.is_open()) {
+        cout << "File failed to open!\n";
+        return NULL;
+    }
 
-    if(trace_file.is_open()){
-        getline(trace_file, line);
-        //cout << line << endl;
-        
-        //split string
-        string info = "";
-        int count = 0;
-         for (auto rem : line) 
-        { 
-            if (rem==',') 
-            {
-                
-                if(count == 0){
-                    //initial address
-                    op->program_counter = info;
-                }
-                else if(count == 1){
-                    //instruction type => convert it to int then enum
-                    int type = stoi(info);
-                    cout << info << endl;
-                    op->type = static_cast<InstructionType>(type);
-                    //is there a more succint way to do this?
-                }
-                else{
-                    //dependencies
-                    op->addDependency(info);
-                }
-                
-                info=""; 
-                count++;
-            } 
-            else
-            { 
-                info=info+rem; 
-            } 
-        } 
-        
+    string line;
+    getline(trace_file, line);
+    vector<string> input;
+    stringstream line_stream(line);
+
+    while (line_stream.good()) {
+        string sub_string;
+        getline(line_stream, sub_string, ',');
+        input.push_back(sub_string);
     }
-    else{
-       cout << "File not open!\n";
+
+    int size = input.size();
+
+    if (size < 2) {
+        cout << "Invalid line\n";
+        return NULL;
     }
-    return *op;
+
+    Instruction * instruction = new Instruction();
+    instruction->program_counter = input[0];
+
+    int type = stoi(input[1]);
+    instruction->type = static_cast<InstructionType>(type);
+
+    for (int i = 2; i < size; i++) {
+        instruction->addDependency(input[i]);
+    }
+
+    return instruction;
 }
 
 

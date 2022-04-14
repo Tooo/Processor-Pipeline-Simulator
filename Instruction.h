@@ -9,7 +9,7 @@ using namespace std;
   - Enum class for Instruction Type
 */
 enum class InstructionType {
-    NAN,
+    INVALID,
     INTEGER,
     FLOATING_POINT,
     BRANCH,

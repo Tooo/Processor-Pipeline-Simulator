@@ -1,10 +1,10 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "Instruction.h"
 #include <bits/stdc++.h>
-
 using namespace std;
+
+#include "Instruction.h"
 
 #ifndef TRACEINPUT_H_
 #define TRACEINPUT_H_
@@ -19,9 +19,10 @@ class TraceInput {
 
     public:
         TraceInput(string trace_file_name, int start_inst, int inst_count);
+        
         int getCurrLine();
         void prepFile();
-        Instruction getNextInstruction();
+        Instruction* getNextInstruction();
 
 };
 #endif

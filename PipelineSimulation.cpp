@@ -11,8 +11,8 @@ PipelineSimulation::~PipelineSimulation() {
 
 void PipelineSimulation::start() {
     for (int i = 0; i < 100; i++) {
-        Instruction instruction = trace_input->getNextInstruction();
-        cout << instruction.toString();
+        Instruction* instruction = trace_input->getNextInstruction();
+        cout << instruction->toString();
     }
 
 }
