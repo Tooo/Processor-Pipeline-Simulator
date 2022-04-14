@@ -4,8 +4,8 @@ using namespace std;
 
 #include "Instruction.h"
 
-#ifndef PIPELINESIMULATION_H_
-#define PIPELINESIMULATION_H_
+#ifndef INSTRUCTIONMANAGER_H_
+#define INSTRUCTIONMANAGER_H_
 class InstructionManager {
     public:
         InstructionManager();
