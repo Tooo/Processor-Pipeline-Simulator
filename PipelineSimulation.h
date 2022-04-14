@@ -6,10 +6,12 @@
 #define PIPELINESIMULATION_H_
 class PipelineSimulation {
     private:
-        int width;
-        TraceInput* trace_input;
         InstructionManager* instruction_manager;
         StatsManager* stats_manager;
+        int width;
+        TraceInput* trace_input;
+        int current_cycle;
+        
     
     public:
         PipelineSimulation(TraceInput* trace_input, int width);
