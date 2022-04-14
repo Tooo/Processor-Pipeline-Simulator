@@ -15,13 +15,13 @@ class TraceInput {
         int inst_count;
 
         int curr_line;
-        ifstream traceFile;
+        ifstream trace_file;
 
     public:
         TraceInput(string trace_file_name, int start_inst, int inst_count);
         int getCurrLine();
         void prepFile();
-        Instruction nextInstruction();
+        Instruction getNextInstruction();
 
 };
 #endif

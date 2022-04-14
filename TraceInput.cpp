@@ -15,24 +15,25 @@ int TraceInput::getCurrLine(){
 
 void TraceInput::prepFile(){
 
-    traceFile.open(trace_file_name);
+    trace_file.open(trace_file_name);
 
-    if(traceFile.is_open()){
+    if(trace_file.is_open()){
 
         while(curr_line < start_inst){
-            traceFile.get();
+            trace_file.get();
             curr_line++;
         }
     }
 }
 
-Instruction TraceInput::nextInstruction(){
-
+Instruction TraceInput::getNextInstruction(){
     string line;
+    Instruction* op = new Instruction();
 
-    if(traceFile.is_open()){
-        line = traceFile.get();
-        Instruction* op = new Instruction();
+    if(trace_file.is_open()){
+        getline(trace_file, line);
+        //cout << line << endl;
+        
         //split string
         string info = "";
         int count = 0;
@@ -48,6 +49,7 @@ Instruction TraceInput::nextInstruction(){
                 else if(count == 1){
                     //instruction type => convert it to int then enum
                     int type = stoi(info);
+                    cout << info << endl;
                     op->type = static_cast<InstructionType>(type);
                     //is there a more succint way to do this?
                 }
@@ -63,11 +65,13 @@ Instruction TraceInput::nextInstruction(){
             { 
                 info=info+rem; 
             } 
-        }  
+        } 
+        
     }
     else{
-       cout << "File not open!\n"; 
+       cout << "File not open!\n";
     }
+    return *op;
 }
 
 

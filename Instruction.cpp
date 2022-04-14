@@ -10,7 +10,7 @@ Instruction::Instruction(string program_counter, InstructionType type, vector<st
 
 
 Instruction::Instruction() {
-    dependencies = vector <string> (5);
+    dependencies = {};
 }
 
 void Instruction::addDependency(string dependency){
@@ -21,11 +21,17 @@ string Instruction::toString() {
     stringstream ss;
     ss << "PC: " << program_counter;
     ss << " Type: " << int(type);
-    ss << " Dependeices";
 
-    for (int i = 0; i < dependencies.size(); i++) {
-        ss << dependencies[i];
+    int size = int(dependencies.size());
+
+    if (size != 0) {
+        ss << " Dependencies ";
+        for (int i = 0; i < size-1; i++) {
+            ss << dependencies[i] << ", ";
+        }
+        ss << dependencies[size-1];
     }
+    
     ss << endl;
     return ss.str();
 }
