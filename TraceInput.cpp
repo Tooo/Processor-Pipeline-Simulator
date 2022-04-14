@@ -66,4 +66,6 @@ Instruction* TraceInput::getNextInstruction() {
     return instruction;
 }
 
-
+void TraceInput::closeFile() {
+    trace_file.close();
+}
