@@ -18,7 +18,8 @@ PipelineSimulation::~PipelineSimulation() {
  * Fetch
  * - Remove fetch -> Enqueue decode queue
  * - If not branch halt
- * - Loop to width get Next Instruction
+ * - Loop to width 
+ * - Get Next Instruction -> Insert fetch
  * - Unless branch halt or no more next instructions
  */
 void PipelineSimulation::fetch() {
@@ -45,8 +46,27 @@ void PipelineSimulation::fetch() {
     }
 }
 
+/**
+ * Decode
+ * - Remove decode -> Enqueue execute queue
+ * - Loop to width
+ * - Dequeue decode -> insert decode
+ * - Unless no more in decode
+ */
 void PipelineSimulation::decode() {
+    Instruction instruction;
+    while (!instruction_manager->isDecodeEmpty()) {
+        instruction = instruction_manager->removeDecode();
+        instruction_manager->enqueueExecute(instruction);
+    }
 
+    for (int i = 0; i < width; i++) {
+        if (instruction_manager->isDecodeQueueEmpty()) {
+            break;
+        }
+        instruction = instruction_manager->dequeueDecode();
+        instruction_manager->insertDecode(instruction);
+    }
 }
 
 void PipelineSimulation::execute() {
