@@ -11,8 +11,15 @@ class PipelineSimulation {
         int width;
         TraceInput* trace_input;
         int current_cycle;
+        int instruction_in_system;
+
+        void fetch();
+        void decode();
+        void execute();
+        void memory();
+        void writeBack();
+
         
-    
     public:
         PipelineSimulation(TraceInput* trace_input, int width);
         ~PipelineSimulation();
