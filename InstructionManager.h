@@ -57,7 +57,6 @@ class InstructionManager {
         bool isMemoryEmpty() {return memory_vector.empty();}
 
         void enqueueRetire(Instruction instruction);
-        InstructionType nextTypeRetire();
         Instruction dequeueRetire();
         void insertRetire(Instruction instruction);
         Instruction removeRetire();
