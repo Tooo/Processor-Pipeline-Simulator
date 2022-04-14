@@ -9,6 +9,7 @@ class StatsManager {
         int retired_branch;
         int retired_load;
         int retired_store;
+        int total_retired;
 
     public:
         StatsManager();

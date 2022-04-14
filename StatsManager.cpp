@@ -9,6 +9,7 @@ StatsManager::StatsManager() {
     retired_branch = 0;
     retired_load = 0;
     retired_store = 0;
+    total_retired = 0;
 }
 
 void StatsManager::retireInstruction(Instruction instruction) {
@@ -32,6 +33,7 @@ void StatsManager::retireInstruction(Instruction instruction) {
             break;
 
     }
+    total_retired++;
 }
 
 void StatsManager::printReport(int current_cycle) {
@@ -39,5 +41,10 @@ void StatsManager::printReport(int current_cycle) {
 
     cout << "Histogram of retired instructions" << endl;
 
+    cout << "Integer Instructions: " << retired_integer / total_retired << "%" << endl;
+    cout << "Floating Point Instructions: " << retired_floating / total_retired << "%" << endl;
+    cout << "Branch Instructions: " << retired_branch / total_retired << "%" << endl;
+    cout << "Load Instructions: " << retired_load / total_retired << "%" << endl;
+    cout << "Store Instructions: " << retired_store / total_retired << "%" << endl;
 
 }
