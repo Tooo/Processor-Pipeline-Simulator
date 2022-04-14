@@ -28,8 +28,8 @@ class InstructionManager {
         bool load_in_memory;
         bool store_in_memory;
 
-        deque<Instruction> retire_queue;
-        vector<Instruction> retire_vector;
+        deque<Instruction> write_back_queue;
+        vector<Instruction> write_back_vector;
 
 };
 #endif
