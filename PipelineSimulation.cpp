@@ -37,6 +37,7 @@ void PipelineSimulation::fetch() {
 
             instruction = *trace_input->getNextInstruction();
             instruction_manager->insertFetch(instruction);
+            instruction_in_system++;
 
             if (instruction.type == InstructionType::BRANCH) {
                 instruction_manager->branch_halt = true;
@@ -113,7 +114,7 @@ void PipelineSimulation::execute() {
             instruction_manager->branch_halt = false;
         }
 
-        if (!instruction_manager->isNextInstructionSatisfied()) {
+        if (!instruction_manager->isNextExecuteSatisfied()) {
             break;
         }
 
@@ -168,16 +169,30 @@ void PipelineSimulation::memory() {
 }
         
 void PipelineSimulation::writeBack() {
+    Instruction instruction;
+    while (!instruction_manager->isWriteBackEmpty()) {
+        instruction = instruction_manager->removeWriteBack();
+        stats_manager->retireInstruction(instruction);
+        instruction_in_system--;
+    }
 
+
+    for (int i = 0; i < width; i++) {
+        if (instruction_manager->isWriteBackQueueEmpty()) {
+            break;
+        }
+        instruction = instruction_manager->dequeueWriteBack();
+        instruction_manager->insertWriteBack(instruction);
+    }
 }
 
 void PipelineSimulation::start() {
     while ( instruction_in_system != 0 || trace_input->needNewInstruction()) {
-        
-        Instruction* instruction = trace_input->getNextInstruction();
-        //cout << instruction->toString();
-        stats_manager->retireInstruction(*instruction);
-        delete instruction;
+        fetch();
+        decode();
+        execute();
+        memory();
+        writeBack();
 
         current_cycle++;
     }

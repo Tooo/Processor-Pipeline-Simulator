@@ -7,11 +7,8 @@ using namespace std;
 #ifndef INSTRUCTIONMANAGER_H_
 #define INSTRUCTIONMANAGER_H_
 class InstructionManager {
-    public:
-        InstructionManager();
-
+    private:
         vector<Instruction> fetch_vector;
-        bool branch_halt;
 
         deque<Instruction> decode_queue;
         vector<Instruction> decode_vector;
@@ -24,6 +21,12 @@ class InstructionManager {
 
         deque<Instruction> write_back_queue;
         vector<Instruction> write_back_vector;
+
+    public:
+        InstructionManager();
+
+        
+        bool branch_halt;
 
         void enqueueFetch(Instruction instruction);
         Instruction dequeueFetch();
@@ -43,7 +46,7 @@ class InstructionManager {
         void insertExecute(Instruction instruction);
         Instruction removeExecute();
         InstructionType nextTypeExecute() {return execute_queue.front().type;}
-        bool isNextInstructionSatisfied();
+        bool isNextExecuteSatisfied();
         bool isExecuteQueueEmpty() {return execute_queue.empty();}
         bool isExecuteEmpty() {return execute_vector.empty();}
 

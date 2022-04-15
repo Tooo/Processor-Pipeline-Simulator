@@ -58,7 +58,7 @@ Instruction InstructionManager::removeExecute() {
     return instruction;
 }
 
-bool InstructionManager::isNextInstructionSatisfied() {
+bool InstructionManager::isNextExecuteSatisfied() {
     return true;
 }
 
