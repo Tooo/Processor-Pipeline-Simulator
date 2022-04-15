@@ -51,7 +51,7 @@ void PipelineSimulation::fetch() {
  * - Remove decode -> Enqueue execute queue
  * - Loop to width
  * - Dequeue decode -> insert decode
- * - Unless no more in decode
+ * - Unless no more in decode queue
  */
 void PipelineSimulation::decode() {
     Instruction instruction;
@@ -69,8 +69,57 @@ void PipelineSimulation::decode() {
     }
 }
 
+/**
+ * Execute
+ * - Remove execute -> Enqueue memory queue
+ * - Loop to width
+ * - Dequeue execute -> insert execute
+ * - Unless no more in execute queue
+ * - or if more than one integer
+ * - or if more than one floating
+ * - or int/float dependencies in execute
+ * - or load/store dependencies in memoryqueue
+ */
 void PipelineSimulation::execute() {
+    Instruction instruction;
+    while (!instruction_manager->isExecuteEmpty()) {
+        instruction = instruction_manager->removeExecute();
+        instruction_manager->enqueueMemory(instruction);
+    }
 
+    bool integer_instruction = false;
+    bool floating_instruction = false;
+    InstructionType type;
+
+    for (int i = 0; i < width; i++) {
+        if (instruction_manager->isExecuteQueueEmpty()) {
+            break;
+        }
+        type = instruction_manager->nextTypeExecute();
+
+        if (type == InstructionType::INTEGER) {
+            if (integer_instruction) {
+                break;
+            } else {
+                integer_instruction = true;
+            }
+        } else if (type == InstructionType::FLOATING_POINT) {
+            if (floating_instruction) {
+                break;
+            } else {
+                floating_instruction = true;
+            }
+        } else if (type == InstructionType::BRANCH) {
+            instruction_manager->branch_halt = false;
+        }
+
+        if (!instruction_manager->isNextInstructionSatisfied()) {
+            break;
+        }
+
+        instruction = instruction_manager->dequeueExecute();
+        instruction_manager->insertExecute(instruction);
+    }
 }
         
 void PipelineSimulation::memory() {

@@ -18,14 +18,9 @@ class InstructionManager {
 
         deque<Instruction> execute_queue;
         vector<Instruction> execute_vector;
-        bool integer_in_execute;
-        bool floating_in_execute;
-        bool branch_in_execute;
 
         deque<Instruction> memory_queue;
         vector<Instruction> memory_vector;
-        bool load_in_memory;
-        bool store_in_memory;
 
         deque<Instruction> write_back_queue;
         vector<Instruction> write_back_vector;
@@ -40,7 +35,6 @@ class InstructionManager {
         Instruction dequeueDecode();
         void insertDecode(Instruction instruction);
         Instruction removeDecode();
-        InstructionType nextTypeDecode() {return decode_queue.front().type;}
         bool isDecodeQueueEmpty() {return decode_queue.empty();}
         bool isDecodeEmpty() {return decode_vector.empty();}
 
@@ -49,6 +43,7 @@ class InstructionManager {
         void insertExecute(Instruction instruction);
         Instruction removeExecute();
         InstructionType nextTypeExecute() {return execute_queue.front().type;}
+        bool isNextInstructionSatisfied();
         bool isExecuteQueueEmpty() {return execute_queue.empty();}
         bool isExecuteEmpty() {return execute_vector.empty();}
 
@@ -64,7 +59,6 @@ class InstructionManager {
         Instruction dequeueWriteBack();
         void insertWriteBack(Instruction instruction);
         Instruction removeWriteBack();
-        InstructionType nextTypeWriteBack() {return write_back_queue.front().type;}
         bool isWriteBackQueueEmpty() {return write_back_queue.empty();}
         bool isWriteBackEmpty() {return write_back_vector.empty();}
 
