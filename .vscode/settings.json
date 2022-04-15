@@ -45,6 +45,7 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "any": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "bitset": "cpp"
     }
 }

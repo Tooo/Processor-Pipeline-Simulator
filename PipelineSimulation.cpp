@@ -18,7 +18,7 @@ PipelineSimulation::~PipelineSimulation() {
  * Write Back
  * - WB -> Retire
  */
-void PipelineSimulation::writeBack() {
+void PipelineSimulation::writeBackToRetire() {
     Instruction instruction;
     while (!instruction_manager->isWriteBackEmpty()) {
         instruction = instruction_manager->dequeueWriteBack();
@@ -31,7 +31,7 @@ void PipelineSimulation::writeBack() {
  * Memory
  * - Mem -> WB
  */    
-void PipelineSimulation::memory() {
+void PipelineSimulation::memoryToWriteBack() {
     Instruction instruction;
     for (int i = 0; i < width; i++) {
         if (instruction_manager->isMemoryEmpty()) {
@@ -48,7 +48,7 @@ void PipelineSimulation::memory() {
  * - Except:
  * -   Only 1 Load or Store
  */
-void PipelineSimulation::execute() {
+void PipelineSimulation::executeToMemory() {
     Instruction instruction;
     bool load_instruction = false;
     bool store_instruction = false;
@@ -88,7 +88,7 @@ void PipelineSimulation::execute() {
  * -    Dependencies
  * -    Only 1 Branch/Int/Float
  */
-void PipelineSimulation::decode() {
+void PipelineSimulation::decodeToExecute() {
     Instruction instruction;
     bool integer_instruction = false;
     bool floating_instruction = false;
@@ -132,10 +132,10 @@ void PipelineSimulation::decode() {
 }
 
 /**
- * Fetch
+ * Fetch to Decode
  * - IF -> ID
  */
-void PipelineSimulation::fetch() {
+void PipelineSimulation::fetchToDecode() {
     Instruction instruction;
     for (int i = 0; i < width; i++) {
         if (instruction_manager->isFetchEmpty()) {
@@ -147,11 +147,11 @@ void PipelineSimulation::fetch() {
 }
 
 /**
- * Fetch New
+ * New To Fetch
  * - Fetch new instruction from trace
  * - unless previous branch haven't passed
  */
-void PipelineSimulation::fetchNew() {
+void PipelineSimulation::newToFetch() {
     Instruction instruction;
     for (int i = 0; i < width; i++) {
         if (!trace_input->needNewInstruction()) {
@@ -176,12 +176,12 @@ void PipelineSimulation::fetchNew() {
 
 void PipelineSimulation::start() {
     while ( instruction_in_system != 0 || trace_input->needNewInstruction()) {
-        writeBack();
-        memory();
-        execute();
-        decode();
-        fetch();
-        fetchNew();
+        writeBackToRetire();
+        memoryToWriteBack();
+        executeToMemory();
+        decodeToExecute();
+        fetchToDecode();
+        newToFetch();
         
         current_cycle++;
     }
