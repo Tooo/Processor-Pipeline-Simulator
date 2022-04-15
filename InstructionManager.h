@@ -36,7 +36,6 @@ class InstructionManager {
 
         void enqueueMemory(Instruction instruction);
         Instruction dequeueMemory();
-        InstructionType nextTypeMemory() {return memory_queue.front().type;}
         bool isMemoryEmpty() {return memory_queue.empty();}
 
         void enqueueWriteBack(Instruction instruction);
