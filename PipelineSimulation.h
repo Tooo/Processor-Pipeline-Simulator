@@ -13,11 +13,12 @@ class PipelineSimulation {
         int current_cycle;
         int instruction_in_system;
 
-        void fetch();
-        void decode();
-        void execute();
-        void memory();
         void writeBack();
+        void memory();
+        void execute();
+        void decode();
+        void fetch();
+        void fetchNew();
 
         
     public:
