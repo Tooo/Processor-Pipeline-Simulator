@@ -121,9 +121,50 @@ void PipelineSimulation::execute() {
         instruction_manager->insertExecute(instruction);
     }
 }
-        
-void PipelineSimulation::memory() {
 
+/**
+ * Memory
+ * - Remove execute -> Enqueue memory queue
+ * - Loop to width
+ * - Dequeue execute -> insert execute
+ * - Unless no more in execute queue
+ * - or if more than one load
+ * - or if more than one store
+ */    
+void PipelineSimulation::memory() {
+    Instruction instruction;
+    while (!instruction_manager->isMemoryEmpty()) {
+        instruction = instruction_manager->removeMemory();
+        instruction_manager->enqueueWriteBack(instruction);
+    }
+
+    bool load_instruction = false;
+    bool store_instruction = false;
+    InstructionType type;
+
+    for (int i = 0; i < width; i++) {
+        if (instruction_manager->isMemoryQueueEmpty()) {
+            break;
+        }
+        type = instruction_manager->nextTypeMemory();
+
+        if (type == InstructionType::LOAD) {
+            if (load_instruction) {
+                break;
+            } else {
+                load_instruction = true;
+            }
+        } else if (type == InstructionType::STORE) {
+            if (store_instruction) {
+                break;
+            } else {
+                store_instruction = true;
+            }
+        }
+
+        instruction = instruction_manager->dequeueMemory();
+        instruction_manager->insertMemory(instruction);
+    }
 }
         
 void PipelineSimulation::writeBack() {
