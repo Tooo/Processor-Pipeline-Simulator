@@ -35,7 +35,7 @@ void PipelineSimulation::fetch() {
                 break;
             }
 
-            instruction = *trace_input->getNextInstruction();
+            instruction = trace_input->getNextInstruction();
             instruction_manager->insertFetch(instruction);
             instruction_in_system++;
 
@@ -90,6 +90,7 @@ void PipelineSimulation::execute() {
 
     bool integer_instruction = false;
     bool floating_instruction = false;
+    bool branch_instruction = false;
     InstructionType type;
 
     for (int i = 0; i < width; i++) {
@@ -112,6 +113,11 @@ void PipelineSimulation::execute() {
             }
         } else if (type == InstructionType::BRANCH) {
             instruction_manager->branch_halt = false;
+            if (branch_instruction) {
+                break;
+            } else {
+                branch_instruction = true;
+            }
         }
 
         if (!instruction_manager->isNextExecuteSatisfied()) {
@@ -175,7 +181,6 @@ void PipelineSimulation::writeBack() {
         stats_manager->retireInstruction(instruction);
         instruction_in_system--;
     }
-
 
     for (int i = 0; i < width; i++) {
         if (instruction_manager->isWriteBackQueueEmpty()) {
