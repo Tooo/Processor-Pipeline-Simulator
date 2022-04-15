@@ -21,7 +21,7 @@ PipelineSimulation::~PipelineSimulation() {
 void PipelineSimulation::writeBack() {
     Instruction instruction;
     while (!instruction_manager->isWriteBackEmpty()) {
-        instruction = instruction_manager->removeWriteBack();
+        instruction = instruction_manager->dequeueWriteBack();
         stats_manager->retireInstruction(instruction);
         instruction_in_system--;
     }
@@ -37,37 +37,74 @@ void PipelineSimulation::memory() {
         if (instruction_manager->isMemoryEmpty()) {
             break;
         }
-        instruction = instruction_manager->removeMemory();
-        instruction_manager->insertWriteBack(instruction);
+        instruction = instruction_manager->dequeueMemory();
+        instruction_manager->enqueueWriteBack(instruction);
     }
 }
 
 /**
  * Execute
- * - Ex -> MEM, max 1 load/store 
+ * - Ex -> MEM
+ * - Except:
+ * -   Only 1 Load or Store
  */
 void PipelineSimulation::execute() {
-
-
-
-
-
     Instruction instruction;
-    while (!instruction_manager->isExecuteEmpty()) {
-        instruction = instruction_manager->removeExecute();
+    bool load_instruction = false;
+    bool store_instruction = false;
+    InstructionType type;
+
+    for (int i = 0; i < width; i++) {
+        if (instruction_manager->isExecuteEmpty()) {
+            break;
+        }
+
+        type = instruction_manager->nextTypeExecute();
+        if (type == InstructionType::LOAD) {
+            if (load_instruction) {
+                break;
+            } else {
+                load_instruction = true;
+            }
+        } else if (type == InstructionType::STORE) {
+            if (store_instruction) {
+                break;
+            } else {
+                store_instruction = true;
+            }
+        } else if (type == InstructionType::BRANCH) {
+            instruction_manager->branch_halt = false;
+        }
+
+        instruction = instruction_manager->dequeueExecute();
         instruction_manager->enqueueMemory(instruction);
     }
+}
 
+/**
+ * Decode
+ * - ID -> Ex
+ * - Except:
+ * -    Dependencies
+ * -    Only 1 Branch/Int/Float
+ */
+void PipelineSimulation::decode() {
+    Instruction instruction;
     bool integer_instruction = false;
     bool floating_instruction = false;
     bool branch_instruction = false;
     InstructionType type;
 
     for (int i = 0; i < width; i++) {
-        if (instruction_manager->isExecuteQueueEmpty()) {
+        if (instruction_manager->isDecodeEmpty()) {
             break;
         }
-        type = instruction_manager->nextTypeExecute();
+
+        if (!instruction_manager->isNextDecodeSatisfied()) {
+            break;
+        }
+
+        type = instruction_manager->nextTypeDecode();
 
         if (type == InstructionType::INTEGER) {
             if (integer_instruction) {
@@ -82,7 +119,6 @@ void PipelineSimulation::execute() {
                 floating_instruction = true;
             }
         } else if (type == InstructionType::BRANCH) {
-            instruction_manager->branch_halt = false;
             if (branch_instruction) {
                 break;
             } else {
@@ -90,75 +126,14 @@ void PipelineSimulation::execute() {
             }
         }
 
-        if (!instruction_manager->isNextExecuteSatisfied()) {
-            break;
-        }
-
-        instruction = instruction_manager->dequeueExecute();
-        instruction_manager->insertExecute(instruction);
-    }
-
-        Instruction instruction;
-    while (!instruction_manager->isMemoryEmpty()) {
-        instruction = instruction_manager->removeMemory();
-        instruction_manager->enqueueWriteBack(instruction);
-    }
-
-    bool load_instruction = false;
-    bool store_instruction = false;
-    InstructionType type;
-
-    for (int i = 0; i < width; i++) {
-        if (instruction_manager->isMemoryQueueEmpty()) {
-            break;
-        }
-        type = instruction_manager->nextTypeMemory();
-
-        if (type == InstructionType::LOAD) {
-            if (load_instruction) {
-                break;
-            } else {
-                load_instruction = true;
-            }
-        } else if (type == InstructionType::STORE) {
-            if (store_instruction) {
-                break;
-            } else {
-                store_instruction = true;
-            }
-        }
-
-        instruction = instruction_manager->dequeueMemory();
-        instruction_manager->insertMemory(instruction);
-    }
-}
-
-/**
- * Decode
- * - Remove decode -> Enqueue execute queue
- * - Loop to width
- * - Dequeue decode -> insert decode
- * - Unless no more in decode queue
- */
-void PipelineSimulation::decode() {
-    Instruction instruction;
-    while (!instruction_manager->isDecodeEmpty()) {
-        instruction = instruction_manager->removeDecode();
-        instruction_manager->enqueueExecute(instruction);
-    }
-
-    for (int i = 0; i < width; i++) {
-        if (instruction_manager->isDecodeQueueEmpty()) {
-            break;
-        }
         instruction = instruction_manager->dequeueDecode();
-        instruction_manager->insertDecode(instruction);
+        instruction_manager->enqueueExecute(instruction);
     }
 }
 
 /**
  * Fetch
- * - 
+ * - IF -> ID
  */
 void PipelineSimulation::fetch() {
     Instruction instruction;
@@ -166,8 +141,8 @@ void PipelineSimulation::fetch() {
         if (instruction_manager->isFetchEmpty()) {
             break;
         }
-        instruction = instruction_manager->removeFetch();
-        instruction_manager->insertDecode(instruction);
+        instruction = instruction_manager->dequeueFetch();
+        instruction_manager->enqueueDecode(instruction);
     }
 }
 
@@ -188,7 +163,7 @@ void PipelineSimulation::fetchNew() {
         }
 
         instruction = trace_input->getNextInstruction();
-        instruction_manager->insertFetch(instruction);
+        instruction_manager->enqueueFetch(instruction);
         instruction_in_system++;
 
         if (instruction.type == InstructionType::BRANCH) {
