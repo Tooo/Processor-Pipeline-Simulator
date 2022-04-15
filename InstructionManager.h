@@ -8,19 +8,19 @@ using namespace std;
 #define INSTRUCTIONMANAGER_H_
 class InstructionManager {
     private:
-        vector<Instruction> fetch_vector;
+        deque<Instruction> fetch_vector;
 
         deque<Instruction> decode_queue;
-        vector<Instruction> decode_vector;
+        deque<Instruction> decode_vector;
 
         deque<Instruction> execute_queue;
-        vector<Instruction> execute_vector;
+        deque<Instruction> execute_vector;
 
         deque<Instruction> memory_queue;
-        vector<Instruction> memory_vector;
+        deque<Instruction> memory_vector;
 
         deque<Instruction> write_back_queue;
-        vector<Instruction> write_back_vector;
+        deque<Instruction> write_back_vector;
 
     public:
         InstructionManager();

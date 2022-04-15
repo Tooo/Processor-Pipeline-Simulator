@@ -11,7 +11,7 @@ void InstructionManager::insertFetch(Instruction instruction) {
 
 Instruction InstructionManager::removeFetch() {
     Instruction instruction = fetch_vector.front();
-    fetch_vector.pop_back();
+    fetch_vector.pop_front();
     return instruction;
 }
 
@@ -33,7 +33,7 @@ void InstructionManager::insertDecode(Instruction instruction) {
 
 Instruction InstructionManager::removeDecode() {
     Instruction instruction = decode_vector.front();
-    decode_vector.pop_back();
+    decode_vector.pop_front();
     return instruction;
 }
 
@@ -54,7 +54,7 @@ void InstructionManager::insertExecute(Instruction instruction) {
 
 Instruction InstructionManager::removeExecute() {
     Instruction instruction = execute_vector.front();
-    execute_vector.pop_back();
+    execute_vector.pop_front();
     return instruction;
 }
 
@@ -105,7 +105,7 @@ void InstructionManager::insertMemory(Instruction instruction) {
 
 Instruction InstructionManager::removeMemory() {
     Instruction instruction = memory_vector.front();
-    memory_vector.pop_back();
+    memory_vector.pop_front();
     return instruction;
 }
 
@@ -126,6 +126,6 @@ void InstructionManager::insertWriteBack(Instruction instruction) {
 
 Instruction InstructionManager::removeWriteBack() {
     Instruction instruction = write_back_vector.front();
-    write_back_vector.pop_back();
+    write_back_vector.pop_front();
     return instruction;
 } 
