@@ -69,7 +69,7 @@ bool InstructionManager::isNextExecuteSatisfied() {
         int execute_size = execute_vector.size();
         for (int j = 0; j < execute_size; j++) {
             instruction = execute_vector[j];
-            if (dependent.compare(instruction.program_counter)) {
+            if (!dependent.compare(instruction.program_counter)) {
                 return false;
             }
         }
@@ -77,7 +77,7 @@ bool InstructionManager::isNextExecuteSatisfied() {
         int memory_size = memory_queue.size();
         for (int j = 0; j < memory_size; j++) {
             instruction = memory_queue[j];
-            if (dependent.compare(instruction.program_counter)) {
+            if (!dependent.compare(instruction.program_counter)) {
                 if (instruction.type == InstructionType::LOAD ||instruction.type == InstructionType::STORE ) {
                     return false;
                 }
