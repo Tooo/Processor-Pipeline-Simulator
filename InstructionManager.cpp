@@ -48,7 +48,7 @@ bool InstructionManager::isNextDecodeSatisfied() {
         int execute_size = execute_queue.size();
         for (int j = 0; j < execute_size; j++) {
             instruction = execute_queue[j];
-            if (dependent.compare(instruction.program_counter)) {
+            if (!dependent.compare(instruction.program_counter)) {
                 return false;
             }
         }
@@ -56,7 +56,7 @@ bool InstructionManager::isNextDecodeSatisfied() {
         int memory_size = memory_queue.size();
         for (int j = 0; j < memory_size; j++) {
             instruction = memory_queue[j];
-            if (dependent.compare(instruction.program_counter)) {
+            if (!dependent.compare(instruction.program_counter)) {
                 if (instruction.type == InstructionType::LOAD ||instruction.type == InstructionType::STORE ) {
                     return false;
                 }
