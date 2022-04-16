@@ -33,12 +33,11 @@ void PipelineSimulation::writeBackToRetire() {
  */    
 void PipelineSimulation::memoryToWriteBack() {
     Instruction instruction;
-    for (int i = 0; i < width; i++) {
-        if (instruction_manager->isMemoryEmpty()) {
-            break;
-        }
+    int count = 0;
+    while (count < width && !instruction_manager->isMemoryEmpty()) {
         instruction = instruction_manager->dequeueMemory();
         instruction_manager->enqueueWriteBack(instruction);
+        count++;
     }
 }
 
@@ -53,12 +52,9 @@ void PipelineSimulation::executeToMemory() {
     bool load_instruction = false;
     bool store_instruction = false;
     InstructionType type;
-
-    for (int i = 0; i < width; i++) {
-        if (instruction_manager->isExecuteEmpty()) {
-            break;
-        }
-
+    int count = 0;
+    
+    while (count < width && !instruction_manager->isExecuteEmpty()) {
         type = instruction_manager->nextTypeExecute();
         if (type == InstructionType::LOAD) {
             if (load_instruction) {
@@ -78,6 +74,7 @@ void PipelineSimulation::executeToMemory() {
 
         instruction = instruction_manager->dequeueExecute();
         instruction_manager->enqueueMemory(instruction);
+        count++;
     }
 }
 
@@ -94,12 +91,9 @@ void PipelineSimulation::decodeToExecute() {
     bool floating_instruction = false;
     bool branch_instruction = false;
     InstructionType type;
+    int count = 0;
 
-    for (int i = 0; i < width; i++) {
-        if (instruction_manager->isDecodeEmpty()) {
-            break;
-        }
-
+    while (count < width && !instruction_manager->isDecodeEmpty()) {
         if (!instruction_manager->isNextDecodeSatisfied()) {
             break;
         }
@@ -128,6 +122,7 @@ void PipelineSimulation::decodeToExecute() {
 
         instruction = instruction_manager->dequeueDecode();
         instruction_manager->enqueueExecute(instruction);
+        count++;
     }
 }
 
@@ -137,12 +132,11 @@ void PipelineSimulation::decodeToExecute() {
  */
 void PipelineSimulation::fetchToDecode() {
     Instruction instruction;
-    for (int i = 0; i < width; i++) {
-        if (instruction_manager->isFetchEmpty()) {
-            break;
-        }
+    int count = 0;
+    while (count < width && !instruction_manager->isFetchEmpty()) {
         instruction = instruction_manager->dequeueFetch();
         instruction_manager->enqueueDecode(instruction);
+        count++;
     }
 }
 
@@ -153,25 +147,17 @@ void PipelineSimulation::fetchToDecode() {
  */
 void PipelineSimulation::newToFetch() {
     Instruction instruction;
-    for (int i = 0; i < width; i++) {
-        if (!trace_input->needNewInstruction()) {
-            break;
-        }
-
-        if (instruction_manager->branch_halt) {
-            break;
-        }
-
+    int count = 0;
+    while (count < width && trace_input->needNewInstruction() && !instruction_manager->branch_halt) {
         instruction = trace_input->getNextInstruction();
         instruction_manager->enqueueFetch(instruction);
         instruction_in_system++;
 
         if (instruction.type == InstructionType::BRANCH) {
             instruction_manager->branch_halt = true;
-            break;
         }
+        count++;
     }
-
 }
 
 void PipelineSimulation::start() {
