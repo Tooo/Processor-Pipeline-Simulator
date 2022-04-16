@@ -6,11 +6,15 @@ Instruction::Instruction(string program_counter, InstructionType type, vector<st
     this->program_counter = program_counter;
     this->type = type;
     this->dependencies = dependencies;
+    memorized = false;
+    executed = false;
 }
 
 
 Instruction::Instruction() {
     dependencies = {};
+    memorized = false;
+    executed = false;
 }
 
 void Instruction::addDependency(string dependency){

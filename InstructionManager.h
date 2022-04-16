@@ -33,10 +33,12 @@ class InstructionManager {
         Instruction dequeueExecute();
         InstructionType nextTypeExecute() {return execute_queue.front().type;}
         bool isExecuteEmpty() {return execute_queue.empty();}
+        void executeInstructions(int width);
 
         void enqueueMemory(Instruction instruction);
         Instruction dequeueMemory();
         bool isMemoryEmpty() {return memory_queue.empty();}
+        void memorizeInstructions(int width);
 
         void enqueueWriteBack(Instruction instruction);
         Instruction dequeueWriteBack();

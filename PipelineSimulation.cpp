@@ -34,6 +34,9 @@ void PipelineSimulation::writeBackToRetire() {
 void PipelineSimulation::memoryToWriteBack() {
     Instruction instruction;
     int count = 0;
+    
+    instruction_manager->memorizeInstructions(width);
+
     while (count < width && !instruction_manager->isMemoryEmpty()) {
         instruction = instruction_manager->dequeueMemory();
         instruction_manager->enqueueWriteBack(instruction);
@@ -53,7 +56,9 @@ void PipelineSimulation::executeToMemory() {
     bool store_instruction = false;
     InstructionType type;
     int count = 0;
-    
+
+    instruction_manager->executeInstructions(width);
+
     while (count < width && !instruction_manager->isExecuteEmpty()) {
         type = instruction_manager->nextTypeExecute();
         if (type == InstructionType::LOAD) {
@@ -68,8 +73,6 @@ void PipelineSimulation::executeToMemory() {
             } else {
                 store_instruction = true;
             }
-        } else if (type == InstructionType::BRANCH) {
-            instruction_manager->branch_halt = false;
         }
 
         instruction = instruction_manager->dequeueExecute();
