@@ -25,6 +25,8 @@ class Instruction {
         string program_counter;
         InstructionType type;
         vector<string> dependencies;
+        bool executed;
+        bool memorized;
 
         void addDependency(string dependency);
         string toString();

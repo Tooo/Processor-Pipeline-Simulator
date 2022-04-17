@@ -1,4 +1,5 @@
 #include <iostream>
+#include <math.h>
 using namespace std;
 
 #include "StatsManager.h"
@@ -41,10 +42,19 @@ void StatsManager::printReport(int current_cycle) {
 
     cout << "Histogram of retired instructions" << endl;
 
-    cout << "Integer Instructions: " << retired_integer / total_retired << "%" << endl;
-    cout << "Floating Point Instructions: " << retired_floating / total_retired << "%" << endl;
-    cout << "Branch Instructions: " << retired_branch / total_retired << "%" << endl;
-    cout << "Load Instructions: " << retired_load / total_retired << "%" << endl;
-    cout << "Store Instructions: " << retired_store / total_retired << "%" << endl;
+    int integer_percentage = round(100 * float(retired_integer)/total_retired);
+    cout << "Integer Instructions: " << integer_percentage << "%" << endl;
+
+    int floating_percentage = round(100 * float(retired_floating)/total_retired);
+    cout << "Floating Point Instructions: " << floating_percentage << "%" << endl;
+
+    int branch_percentage = round(100 * float(retired_branch)/total_retired);
+    cout << "Branch Instructions: " << branch_percentage << "%" << endl;
+
+    int load_percentage = round(100 * float(retired_load)/total_retired);
+    cout << "Load Instructions: " << load_percentage << "%" << endl;
+
+    int store_percentage = round(100 * float(retired_store)/total_retired);
+    cout << "Store Instructions: " << store_percentage << "%" << endl;
 
 }

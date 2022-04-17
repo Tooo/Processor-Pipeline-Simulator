@@ -22,7 +22,7 @@ class TraceInput {
 
         void prepFile();
         bool needNewInstruction();
-        Instruction* getNextInstruction();
+        Instruction getNextInstruction();
         void closeFile();
 
 };

@@ -4,32 +4,45 @@ using namespace std;
 
 #include "Instruction.h"
 
-#ifndef PIPELINESIMULATION_H_
-#define PIPELINESIMULATION_H_
+#ifndef INSTRUCTIONMANAGER_H_
+#define INSTRUCTIONMANAGER_H_
 class InstructionManager {
+    private:
+        deque<Instruction> fetch_queue;
+        deque<Instruction> decode_queue;
+        deque<Instruction> execute_queue;
+        deque<Instruction> memory_queue;
+        deque<Instruction> write_back_queue;
+
     public:
         InstructionManager();
 
-        deque<Instruction> fetch_queue;
-        vector<Instruction> fetch_vector;
         bool branch_halt;
 
-        deque<Instruction> decode_queue;
-        vector<Instruction> decode_vector;
+        void enqueueFetch(Instruction instruction);
+        Instruction dequeueFetch();
+        bool isFetchEmpty() {return fetch_queue.empty();}
 
-        deque<Instruction> execute_queue;
-        vector<Instruction> execute_vector;
-        bool integer_in_execute;
-        bool floating_in_execute;
-        bool branch_in_execute;
+        void enqueueDecode(Instruction instruction);
+        Instruction dequeueDecode();
+        bool isDecodeEmpty() {return decode_queue.empty();}
+        InstructionType nextTypeDecode() {return decode_queue.front().type;}
+        bool isNextDecodeSatisfied();
 
-        deque<Instruction> memory_queue;
-        vector<Instruction> memory_vector;
-        bool load_in_memory;
-        bool store_in_memory;
+        void enqueueExecute(Instruction instruction);
+        Instruction dequeueExecute();
+        InstructionType nextTypeExecute() {return execute_queue.front().type;}
+        bool isExecuteEmpty() {return execute_queue.empty();}
+        void executeInstructions(int width);
 
-        deque<Instruction> write_back_queue;
-        vector<Instruction> write_back_vector;
+        void enqueueMemory(Instruction instruction);
+        Instruction dequeueMemory();
+        bool isMemoryEmpty() {return memory_queue.empty();}
+        void memorizeInstructions(int width);
+
+        void enqueueWriteBack(Instruction instruction);
+        Instruction dequeueWriteBack();
+        bool isWriteBackEmpty() {return write_back_queue.empty();}
 
 };
 #endif
