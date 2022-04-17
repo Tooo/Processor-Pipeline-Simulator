@@ -6,7 +6,7 @@ TraceInput::TraceInput(string trace_file_name, int start_inst, int inst_count) {
     this->start_inst = start_inst;
     this->inst_count = inst_count;
     curr_line = 1;
-
+    file_failed = false;
     prepFile();
 }
 
@@ -15,11 +15,12 @@ void TraceInput::prepFile() {
     trace_file.open(trace_file_name);
 
     if (trace_file.is_open()) {
-
         while (curr_line < start_inst) {
             getline(trace_file, temp);
             curr_line++;
         }
+    } else {
+        file_failed = true;
     }
 }
 
