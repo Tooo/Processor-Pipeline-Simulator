@@ -7,13 +7,13 @@ CCFLAGS= -g -std=c++11 -Wall -Werror
 LDLIBS= -lm
 SRC=$(wildcard *.cpp)
 
-all: proj1
+all: proj2
 
 
 
 ###################################
 # BEGIN SOLUTION
-proj1: $(SRC)
+proj2: $(SRC)
 	$(CXX) -o proj2 $^ $(CCFLAGS) $(LDLIBS)
 
 
