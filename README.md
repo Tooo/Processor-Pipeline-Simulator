@@ -32,8 +32,9 @@ make proj2
 Trace files can be found here: https://www.microarch.org/cvp1/
 
 ## Simulation Information
-5-stage pipeline: Instruction Fetch (IF), Instruction Decode and Read Operands (ID), Instruction Issue and Execute (EX), Memory access (MEM), and writeback results/retire (WB).
-Process has W-wide superscaler. Instruction proceed to next stage as long as they have no dependences. Processor has 1 integer ALUY unit, 1 floating point unit, 1 branch execution unit, 1 read port from L1 data caache, and 1 write port into L1 data cache.
+5-stage pipeline: Instruction Fetch (IF), Instruction Decode and Read Operands (ID), Instruction Issue and Execute (EX), Memory access (MEM), and writeback results/retire (WB). 
+Process has a W-wide superscalar. Instructions proceed to the next stage as long as they have no dependencies. 
+Processor has 1 integer ALUY unit, 1 floating point unit, 1 branch execution unit, 1 read port from L1 data cache, and 1 write port into L1 data cache.
 
 ### Input Trace
 Each line represents an instruction with comma seperated values, they contain.
