@@ -75,3 +75,13 @@ A report will be generated at the end of the simulation. The report includes...
 | TraceInput | Handles trace file | 
 | StatsManager | Handles report |
 | Instruction | Holds all instruction information |
+
+## Report
+### Two Factor Analysis
+A two-factor experiment design is ran on the Simple Processor
+Pipeline Simulator. 
+We measured the impact of the pipeline width and the workload trace.
+The overall mean runtime, impact of each level, allocation of variation to W, T, and their interaction and experimental errors was all measured. 
+Six replications was measured to estimate the impact of each level and allocation of variation.
+
+[Two Factor Analysis.pdf](Two%20Factor%20Analysis.pdf)
